@@ -1,10 +1,9 @@
-name: CI/CD Pipeline
+name: Deploy to EC2
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   deploy:
@@ -24,21 +23,8 @@ jobs:
 
     - name: Test SSH Connection with Added Key
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'SSH connection successful!'"
+        ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'SSH connection successful!'"
       env:
-        SSH_USER: ubuntu  # Replace with your SSH user
-        SSH_HOST: your-ec2-public-ip  # Replace with your EC2 instance's public IP
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}  # Ensure this references the correct secret
 
-    - name: Deploy to Server
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-        docker pull ${{ secrets.DOCKER_USERNAME }}/expense-tracker:latest
-        cd /home/ubuntu/expense-tracker
-        docker-compose down
-        docker-compose up -d
-        EOF
-      env:
-        SSH_USER: ubuntu  # Replace with your SSH user
-        SSH_HOST: 3.10.175.69  # Replace with your EC2 instance's public IP
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
