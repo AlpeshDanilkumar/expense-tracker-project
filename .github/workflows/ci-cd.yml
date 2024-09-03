@@ -18,19 +18,18 @@ jobs:
       run: |
         eval $(ssh-agent -s)
         echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-        # Debugging: List the added SSH keys
-        ssh-add -l
+        ssh-add -l  # List the added key(s) for verification
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Test SSH Connection
+    - name: Test SSH Connection with Specified Key
       run: |
-        # Debugging: Test the SSH connection with verbose output
-        ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful!"'
+        # Use the key directly with the ssh command
+        ssh -i /home/runner/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful!"'
         
     - name: Deploy to Server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        ssh -i /home/runner/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
         docker pull ${{ secrets.DOCKER_USERNAME }}/expense-tracker:latest
         cd /home/ubuntu/expense-tracker
         docker-compose down
