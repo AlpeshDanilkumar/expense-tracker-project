@@ -28,16 +28,23 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/expense-tracker:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/expense-tracker:latest
 
-      # Step 5: Deploy to the EC2 instance via SSH
-      - name: Deploy to Server
+      # Step 5: Start the SSH agent and add the private key
+      - name: Start SSH agent
+        run: |
+          eval $(ssh-agent -s)
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Step 6: Deploy to the EC2 instance via SSH
+      - name: Deploy to Server
         run: |
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           docker pull ${{ secrets.DOCKER_USERNAME }}/expense-tracker:latest
           cd /home/ubuntu/expense-tracker
           docker-compose down
           docker-compose up -d
           EOF
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
