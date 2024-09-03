@@ -24,20 +24,23 @@ jobs:
 
     - name: Test SSH Connection with Added Key
       run: |
-        ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful!"'
+        ssh -o StrictHostKeyChecking=no -i /dev/stdin ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        echo "SSH connection successful!"
+        EOF
+      env:
+        SSH_USER: ubuntu  # Replace with your SSH user
+        SSH_HOST: your-ec2-public-ip  # Replace with your EC2 instance's public IP
 
     - name: Deploy to Server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i /dev/stdin ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
         docker pull ${{ secrets.DOCKER_USERNAME }}/expense-tracker:latest
         cd /home/ubuntu/expense-tracker
         docker-compose down
         docker-compose up -d
         EOF
-
-    env:
-      SSH_USER: ubuntu  # Replace with your SSH user
-      SSH_HOST: 3.10.175.69  # Replace with your EC2 instance's public IP
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
+      env:
+        SSH_USER: ubuntu  # Replace with your SSH user
+        SSH_HOST: 3.10.175.69  # Replace with your EC2 instance's public IP
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
