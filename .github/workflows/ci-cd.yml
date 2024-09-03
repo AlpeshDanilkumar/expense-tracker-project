@@ -22,14 +22,13 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Test SSH Connection with Specified Key
+    - name: Test SSH Connection with Added Key
       run: |
-        # Use the key directly with the ssh command
-        ssh -i /home/runner/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful!"'
-        
+        ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful!"'
+
     - name: Deploy to Server
       run: |
-        ssh -i /home/runner/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
         docker pull ${{ secrets.DOCKER_USERNAME }}/expense-tracker:latest
         cd /home/ubuntu/expense-tracker
         docker-compose down
