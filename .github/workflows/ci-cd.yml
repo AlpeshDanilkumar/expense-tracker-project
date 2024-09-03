@@ -42,5 +42,3 @@ jobs:
         SSH_HOST: 3.10.175.69  # Replace with your EC2 instance's public IP
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-
