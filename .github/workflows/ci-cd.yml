@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # This triggers the workflow on push to the main branch
+      - main  # Triggers the workflow on push to the main branch
 
 jobs:
   build:
@@ -36,10 +36,10 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 6: Deploy the application to the EC2 instance
+      # Step 6: Deploy the application to the EC2 instance (with detailed SSH output)
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           docker pull ${{ secrets.DOCKER_USERNAME }}/expense-tracker:latest
           cd /home/ubuntu/expense-tracker
           docker-compose down
