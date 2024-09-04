@@ -43,7 +43,7 @@ services:
       image: prometheuscommunity/postgres-exporter
       container_name: postgres_exporter
       environment:
-        DATA_SOURCE_NAME: "postgresql://expense_user:password@db:5432/expense_tracker"
+        DATA_SOURCE_NAME: "postgresql://expense_user:password@db:5432/expense_tracker?sslmode=disable"
       depends_on:
         - db
       ports:
