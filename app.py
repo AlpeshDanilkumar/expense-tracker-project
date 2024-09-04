@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from prometheus_client import Counter, generate_latest
 from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://expense_user:password@db/expense_tracker'
 db = SQLAlchemy(app)
 metrics = PrometheusMetrics(app)
+
+# Define a custom metric for data entries
+data_entry_counter = Counter('data_entries_total', 'Total number of data entries')
 
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -25,7 +29,12 @@ def add_expense():
     new_expense = Expense(category=category, price=float(price))
     db.session.add(new_expense)
     db.session.commit()
+    data_entry_counter.inc()  # Increment the custom metric
     return redirect(url_for('index'))
+
+@app.route('/metrics')
+def metrics_route():
+    return generate_latest()
 
 if __name__ == '__main__':
     with app.app_context():
