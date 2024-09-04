@@ -9,7 +9,7 @@ The Expense Tracker application is a web-based tool to help users track their ex
 - [Prerequisites](#prerequisites)
 - [Modules](#Modules)
 - [Set up and Installation](#Set-up-and-Installation)
-- [Running the Application](#running-the-application)
+- [Running the Application](#Running-the-application)
 - [Monitoring and SRE](#monitoring-and-sre)
 - [GitHub Actions Pipeline](#github-actions-pipeline)
 - [Future Improvements](#future-improvements)
@@ -102,3 +102,34 @@ Grafana allows you to query, visualize, and understand metrics and logs from var
 - **metrics_path**: This specifies the path from which Prometheus scrapes the metrics. In Flask, the prometheus_flask_exporter exposes metrics at /metrics.
 - **static_configs**: Defines static targets (i.e., hard-coded endpoints that Prometheus will scrape).
 - **targets**: This specifies that Prometheus should scrape metrics from the expense-tracker service on port 5000. Prometheus will use Docker’s internal DNS resolution, so expense-tracker refers to the Flask service running in the Docker Compose network.
+
+## Running the application
+**Expense tracker homepage**
+<img width="548" alt="Screenshot 2024-09-04 at 12 20 14" src="https://github.com/user-attachments/assets/c899de3f-9c18-41a0-a467-ec32d5b809f8">
+
+**Input Category and Price**
+<img width="520" alt="Screenshot 2024-09-04 at 12 20 41" src="https://github.com/user-attachments/assets/594f1854-04d7-427a-8d2a-f7b4a8516192">
+
+**Add expense**
+<img width="502" alt="Screenshot 2024-09-04 at 12 20 48" src="https://github.com/user-attachments/assets/0dedffa3-31f5-4b1e-9626-a79c4094ab22">
+
+## Monitoring and SRE
+
+### Dashboard
+
+**Data entries**
+![1067db8d-7fb5-4849-8945-d00661a0870b](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
+
+**CPU**
+![c3097ed4-4f42-43c0-bb6e-60424e242ba1](https://github.com/user-attachments/assets/88f81947-1a0f-4bf9-a9ab-a17e0ba2c6c5)
+
+**Available memory**
+![06bf004e-56a9-4609-9972-6a9c13ba2eac](https://github.com/user-attachments/assets/c9a72820-442c-4119-b49e-53cef7c89fb8)
+
+**Node exporter**
+![06bf004e-56a9-4609-9972-6a9c13ba2eac](https://github.com/user-attachments/assets/d48bf1aa-f2cd-4ce7-a31e-3f038b5e8bd6)
+
+**Network Traffic**
+![e3a9adf1-27d0-404d-9938-4897aabccf58](https://github.com/user-attachments/assets/6103b5fc-ad11-4a95-bd4a-c7a5f99ae571)
+
+
