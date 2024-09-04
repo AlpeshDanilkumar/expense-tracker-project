@@ -1,30 +1,30 @@
 groups:
 - name: example
   rules:
-  - alert: HighCPUUsage
-    expr: rate(node_cpu_seconds_total{mode="idle"}[5m]) < 0.2
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      summary: "High CPU usage detected"
-      description: "CPU usage has been above 80% for the last 5 minutes."
-  
-  - alert: HighMemoryUsage
-    expr: node_memory_Active_bytes / node_memory_MemTotal_bytes > 0.8
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      summary: "High memory usage detected"
-      description: "Memory usage has been above 80% for the last 5 minutes."
-  
-  - alert: DataEntriesAlert
-    expr: data_entries_total[5m] > 10
-    for: 5m
-    labels:
-      severity: info
-    annotations:
-      summary: "High number of data entries"
-      description: "More than 10 data entries have been added in the last 5 minutes."
+    - alert: HighCPUUsage
+      expr: rate(node_cpu_seconds_total{mode="idle"}[5m]) < 0.2
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High CPU usage detected"
+        description: "CPU usage has been above 80% for the last 5 minutes."
+    
+    - alert: HighMemoryUsage
+      expr: node_memory_Active_bytes / node_memory_MemTotal_bytes > 0.8
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High memory usage detected"
+        description: "Memory usage has been above 80% for the last 5 minutes."
+    
+    - alert: DataEntriesAlert
+      expr: data_entries_total[5m] > 10
+      for: 5m
+      labels:
+        severity: info
+      annotations:
+        summary: "High number of data entries"
+        description: "More than 10 data entries have been added in the last 5 minutes."
 
