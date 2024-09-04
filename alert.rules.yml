@@ -18,13 +18,3 @@ groups:
       annotations:
         summary: "High memory usage detected"
         description: "Memory usage has been above 80% for the last 5 minutes."
-    
-    - alert: DataEntriesAlert
-      expr: data_entries_total[5m] > 10
-      for: 5m
-      labels:
-        severity: info
-      annotations:
-        summary: "High number of data entries"
-        description: "More than 10 data entries have been added in the last 5 minutes."
-
