@@ -4,12 +4,14 @@
 
 The Expense Tracker application is a web-based tool to help users track their expenses. Built using Flask and PostgreSQL, this application is containerized with Docker and managed with Docker Compose. It includes monitoring through Prometheus and visualization with Grafana. This README provides a detailed guide for setting up, running, monitoring, and deploying the application.
 
+
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
 - [Modules](#Modules)
 - [Set up and Installation](#Set-up-and-Installation)
 - [Running the Application](#Running-the-application)
+- [Data Flow and Verification](#data-flow-and-verification)
 - [Monitoring and SRE](#monitoring-and-sre)
 - [GitHub Actions Pipeline](#github-actions-pipeline)
 - [Future Improvements](#future-improvements)
@@ -93,10 +95,13 @@ Is a simple and efficient way to containerize the Flask-based Expense Tracker ap
 - **prometheus-flask-exporrter**: This library is responsible for exposing the Flask app’s performance metrics.
 
 ### docker-compose.yml
+<<<<<<< HEAD
 
 Grafana allows you to query, visualize, and understand metrics and logs from various data sources in real-time. Provides visualization of the metrics collected by Prometheus.
 Dashboards are set up to display various metrics such as request counts and response times. Grafana is often used with time-series databases like Prometheus, InfluxDB, and Graphite to monitor the health and performance of systems and applications.
 
+=======
+>>>>>>> 9f3dc9d4959103b428cee3ea09cea9d5819b7213
 - There are four services: expense-tracker (Flask app), db (PostgreSQL database), prometheus, and grafana.
 - **expense_user**: The database user.
 - **password**: The user’s password
@@ -164,6 +169,29 @@ Is used to monitor the total time spent on disk I/O operations (read and write) 
 ![e3a9adf1-27d0-404d-9938-4897aabccf58](https://github.com/user-attachments/assets/6103b5fc-ad11-4a95-bd4a-c7a5f99ae571)
 The purpose of this query is to monitor incoming network traffic on the system over the last 5 minutes, providing insights into the rate at which data is being received over different network interfaces. If the rate of network traffic is higher than expected, this could indicate potential bottlenecks or network-related issues.
 
+## Data Flow and Verification
+![e25610a4-e647-41b6-afd1-434e55e3ce19](https://github.com/user-attachments/assets/c9302db9-2e1d-45cc-af0c-ac39822bfbdf)
+
+Here’s an overview of how application handles data from user input and stores it in the database, along with how to verify that this process is working correctly:
+### 1. Application Flow
+**User Interaction**:
+- Users interact with HTML form hosted on the expense-tracker service. This form allows them to enter details such as category and price for various expenses.
+**Form Submission**:
+- When a user submits the form, the data is sent to the server via an HTTP POST request to the /add route.
+**Data Handling**:
+- The Flask app, running within the expense-tracker container, processes this POST request.
+- In the /add route handler, the form data (category and price) is extracted.
+**Database Operation**:
+- A new Expense record is created with the submitted category and price.
+- This record is then added to the database session and committed, which saves it to the PostgreSQL database.
+**Redirect**:
+- The user is redirected back to the main page (/), where they can see the updated list of expenses and the total amount spent.
+### 2. Verification
+**Verify Container Status**:
+- We can check that all your Docker containers are running properly by using the command docker ps. Ensure you see containers for your expense-tracker, postgres, prometheus, node-exporter, and grafana services.
+**Check Database Content**:
+- Access the PostgreSQL container using docker exec -it expense-tracker-db-1 /bin/bash and log into the PostgreSQL database using psql -h localhost -U expense_user -d expense_tracker.
+- Run SELECT * FROM expense; to view the entries in the expense table. This should reflect the expenses added through the HTML form.
 ### SRE Considerations
 
 1.**Metrics Collection**:
@@ -185,6 +213,3 @@ The purpose of this query is to monitor incoming network traffic on the system o
 - Monitor resource usage and adjust infrastructure accordingly.
 
 5. **Resilience**:
-
-- Implement failover strategies and backup plans for critical components like the database.
-- Regularly test recovery procedures to ensure system resilience.
