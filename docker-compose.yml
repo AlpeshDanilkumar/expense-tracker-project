@@ -39,6 +39,14 @@ services:
     ports:
       - "9100:9100"
 
+  postgres_exporter:
+      image: prometheuscommunity/postgres-exporter
+      depends_on:
+        - db
+      ports:
+        - "9182:9182"
+      command: "--web.listen-address=:9182 --postgres.username=expense_user --postgres.password=password --postgres.database=expense_tracker --postgres.listen-address=db:5432"
+
 volumes:
   postgres_data:
   grafana_data:
