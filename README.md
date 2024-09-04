@@ -84,8 +84,8 @@ Is a simple and efficient way to containerize the Flask-based Expense Tracker ap
 
 
 ### docker-compose.yml
-Prometheus is an open-source monitoring and alerting system primarily designed to monitor systems, applications, and services, offering a powerful time-series database for storing metrics and an alerting mechanism. Prometheus allows you to monitor system health and application performance in real time. It can track system-level metrics like CPU usage, memory consumption, and disk space of the database and other services.
-Grafana allows you to query, visualize, and understand metrics and logs from various data sources in real-time. Grafana is often used with time-series databases like Prometheus, InfluxDB, and Graphite to monitor the health and performance of systems and applications.
+Grafana allows you to query, visualize, and understand metrics and logs from various data sources in real-time. Provides visualization of the metrics collected by Prometheus.
+Dashboards are set up to display various metrics such as request counts and response times. Grafana is often used with time-series databases like Prometheus, InfluxDB, and Graphite to monitor the health and performance of systems and applications.
 
 - There are four services: expense-tracker (Flask app), db (PostgreSQL database), prometheus, and grafana.
 - **expense_user**: The database user.
@@ -96,6 +96,8 @@ Grafana allows you to query, visualize, and understand metrics and logs from var
 
 
 ### prometheus.yml
+Prometheus is an open-source monitoring and alerting system primarily designed to monitor systems, applications, and services, offering a powerful time-series database for storing metrics and an alerting mechanism. Prometheus allows you to monitor system health and application performance in real time. It can track system-level metrics like CPU usage, memory consumption, and disk space of the database and other services.
+
 - **global**: Defines the global settings for Prometheus.
 - **scrape_interval**: It scrapes every 15 seconds. You can adjust this based on your performance needs. Shorter intervals increase granularity but also increase storage and load on Prometheus and the target services.
 - **job_name**: This names the scrape job, which in this case is expense-tracker. You can have multiple jobs, each with its own set of targets.
@@ -104,6 +106,20 @@ Grafana allows you to query, visualize, and understand metrics and logs from var
 - **targets**: This specifies that Prometheus should scrape metrics from the expense-tracker service on port 5000. Prometheus will use Docker’s internal DNS resolution, so expense-tracker refers to the Flask service running in the Docker Compose network.
 
 ## Running the application
+1) **Docker**: Required for containerization. Install from [Docker's official website](https://docs.docker.com/get-docker/).
+2) **Docker Compose**: Needed to manage multi-container Docker applications. Install from [Docker Compose installation guide](https://docs.docker.com/compose/install/).
+3) Clone the Repository```bash
+git clone https://github.com/your-username/expense-tracker.git
+cd expense-tracker
+4) Run the following command to build and start the containers: docker-compose up --build
+5) Access the application
+   a) Flask App: http://localhost:5000
+   b) Grafana: http://localhost:3000 (Login with default username admin and password admin)
+   c) Prometheus: http://localhost:9090
+6) Stopping the application: docker-compose down
+
+The Expense Tracker application is designed to help users manage their expenses effectively. It leverages a Flask web application, PostgreSQL for data storage, and is fully containerized using Docker and Docker Compose. Prometheus is used for monitoring, and Grafana provides visualization for the metrics.
+   
 **Expense tracker homepage**
 <img width="548" alt="Screenshot 2024-09-04 at 12 20 14" src="https://github.com/user-attachments/assets/c899de3f-9c18-41a0-a467-ec32d5b809f8">
 
@@ -113,23 +129,45 @@ Grafana allows you to query, visualize, and understand metrics and logs from var
 **Add expense**
 <img width="502" alt="Screenshot 2024-09-04 at 12 20 48" src="https://github.com/user-attachments/assets/0dedffa3-31f5-4b1e-9626-a79c4094ab22">
 
+
 ## Monitoring and SRE
 
 ### Dashboard
 
 **Data entries**
 ![1067db8d-7fb5-4849-8945-d00661a0870b](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
+The metric  counts the number of expense entries that have been made or added into the Expense Tracker application. By observing the growth of this metric over time, you can track how fast new entries are being added to your database. This can help in identifying trends in user activity or application usage.
 
 **CPU**
 ![c3097ed4-4f42-43c0-bb6e-60424e242ba1](https://github.com/user-attachments/assets/88f81947-1a0f-4bf9-a9ab-a17e0ba2c6c5)
+Retrieves the total amount of time that each CPU core has spent in various modes since the system started. This metric is exposed by Node Exporter, which collects and exports hardware and OS-level metrics for Prometheus. By understanding how your CPU is being utilized (idle vs. active time), you can make informed decisions about optimizing resources or scaling your infrastructure.
 
 **Available memory**
 ![06bf004e-56a9-4609-9972-6a9c13ba2eac](https://github.com/user-attachments/assets/c9a72820-442c-4119-b49e-53cef7c89fb8)
+This query is used to monitor the amount of available memory in the system, in bytes, and is being retrieved from the Node Exporter. By tracking available memory, you can ensure that your system has enough memory for current and future workloads. Running out of memory can cause applications to crash or lead to Out-Of-Memory (OOM) kills. Monitoring MemAvailable ensures you can detect and respond to low memory conditions before they become critical.
 
 **Node exporter**
 ![06bf004e-56a9-4609-9972-6a9c13ba2eac](https://github.com/user-attachments/assets/d48bf1aa-f2cd-4ce7-a31e-3f038b5e8bd6)
+Is used to monitor the total time spent on disk I/O operations (read and write) by a specific device. High disk I/O times indicate that the disk is spending a significant amount of time processing read/write requests. If this value is high relative to system uptime, it could suggest disk bottlenecks or disk performance issues. If a disk is consistently busy for long periods, it may be time to upgrade storage hardware or adjust workloads.
+
 
 **Network Traffic**
 ![e3a9adf1-27d0-404d-9938-4897aabccf58](https://github.com/user-attachments/assets/6103b5fc-ad11-4a95-bd4a-c7a5f99ae571)
+The purpose of this query is to monitor incoming network traffic on the system over the last 5 minutes, providing insights into the rate at which data is being received over different network interfaces. If the rate of network traffic is higher than expected, this could indicate potential bottlenecks or network-related issues.
 
-
+### SRE Considerations
+1.**Metrics Collection**:
+  - Ensure that all relevant metrics are being collected to provide insights into application performance.
+  - Implement additional custom metrics if needed.
+2. **Security**:
+Secure Prometheus and Grafana instances to prevent unauthorized access.
+Configure authentication for Grafana and secure access to the Flask application.
+3. **Automation**:
+  - Use CI/CD pipelines, like GitHub Actions, to automate the build and deployment process.
+Ensure that deployments are automated to reduce manual intervention and potential errors.
+4. **Scalability**:
+  - Consider scaling strategies for the application and database based on load.
+  - Monitor resource usage and adjust infrastructure accordingly.
+5. **Resilience**:
+  - Implement failover strategies and backup plans for critical components like the database.
+  - Regularly test recovery procedures to ensure system resilience.
