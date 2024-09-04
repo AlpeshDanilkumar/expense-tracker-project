@@ -20,3 +20,8 @@ The Expense Tracker application is a web-based tool to help users track their ex
 3. **Prometheus** and **Grafana**: For monitoring and visualization. Install from [Prometheus installation guide](https://prometheus.io/docs/prometheus/latest/installation/) and [Grafana installation guide](https://grafana.com/docs/grafana/latest/installation/).
 
 ## Setup and Installation
+1. **app.py**: defining routes for expense tracking and setting up database models and metrics.
+2. **requirements.txt**: This file lists the Python libraries needed by the Flask app, which will be installed when building the Docker image.
+3. **Dockerfile**: The Dockerfile is set up to create a self-contained image for the Flask app, including dependencies and the command to run the app.
+4. **docker-compose.yml**: Define the services for the Flask app (expense-tracker), PostgreSQL database, and monitoring tools (Prometheus, Grafana, Node Exporter) in a Docker Compose file. This makes it easier to run all services together.
+5. **prometheus.yml**:  Configures Prometheus to scrape metrics from the Flask app and system-level metrics from Node Exporter.
