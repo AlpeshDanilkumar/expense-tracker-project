@@ -41,11 +41,13 @@ services:
 
   postgres_exporter:
       image: prometheuscommunity/postgres-exporter
+      container_name: postgres_exporter
+      environment:
+        DATA_SOURCE_NAME: "postgresql://expense_user:password@db:5432/expense_tracker
       depends_on:
         - db
       ports:
-        - "9182:9182"
-      command: "--web.listen-address=:9182 --postgres.username=expense_user --postgres.password=password --postgres.database=expense_tracker --postgres.listen-address=db:5432"
+        - "9187:9187"
 
 volumes:
   postgres_data:
