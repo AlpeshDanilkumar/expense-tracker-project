@@ -7,7 +7,8 @@ The Expense Tracker application is a web-based tool to help users track their ex
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Setup and Installation](#setup-and-installation)
+- [Modules](#Modules)
+- [Setup and Installation](#Set-up-and-Installation)
 - [Running the Application](#running-the-application)
 - [Monitoring and SRE](#monitoring-and-sre)
 - [GitHub Actions Pipeline](#github-actions-pipeline)
