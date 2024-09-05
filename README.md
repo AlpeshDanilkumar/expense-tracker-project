@@ -1,8 +1,21 @@
-`# Expense Tracker Application
+# Expense Tracker Application
 
 ## Overview
 
 The Expense Tracker application is a comprehensive web-based tool designed to help users efficiently track and manage their expenses. Built with Flask and PostgreSQL, the application is containerized using Docker and orchestrated with Docker Compose. It includes monitoring through Prometheus and visualization with Grafana. This README provides an in-depth guide on setting up, running, monitoring, and deploying the application.
+
+## Application Flow
+
+1. **User Interaction**:
+   - Users interact with the HTML form on the expense-tracker service to input expense details.
+2. **Form Submission**:
+   - Data is sent via HTTP POST request to the `/add` route.
+3. **Data Handling**:
+   - Flask processes the request, extracting the category and price from the form.
+4. **Database Operation**:
+   - A new `Expense` record is created and saved to the PostgreSQL database.
+5. **Redirect**:
+   - Users are redirected to the main page to view updated expense data.
 
 ## Table of Contents
 
@@ -28,6 +41,7 @@ The Expense Tracker application is a comprehensive web-based tool designed to he
 3. **`requirements.txt`**: Lists the Python libraries required by the Flask app, which are installed during the Docker image build.
 4. **`docker-compose.yml`**: Defines the services for the Flask app, PostgreSQL database, and monitoring tools (Prometheus, Grafana, Node Exporter) in Docker Compose.
 5. **`prometheus.yml`**: Configures Prometheus to scrape metrics from the Flask app and system-level metrics from Node Exporter.
+6. **`deploy.yml`**: GitHub Actions workflow configuration for continuous integration and deployment.
 
 ## Set Up and Installation
 
@@ -157,6 +171,33 @@ Configures Prometheus to scrape metrics.
 - **Rule Files:**
 - **`alert.rules.yml`**: Contains alerting rules.
 
+### `deploy.yml`
+
+**Purpose:**
+The `deploy.yml` file defines a GitHub Actions workflow for automating the build, test, and deployment process of the Expense Tracker application. It ensures that the application is built and deployed automatically whenever changes are pushed to the `main` branch of the repository.
+
+**Key Sections:**
+
+- **`name`**: Specifies the name of the workflow, in this case, "Deploy Application."
+
+- **`on`**:
+
+  - **`push`**: Triggers the workflow on pushes to the `main` branch. This means that every time changes are pushed to `main`, the workflow will run.
+
+- **`jobs`**:
+
+  - **`build-and-deploy`**: Defines the job responsible for building and deploying the application.
+
+    - **`runs-on`**: Specifies the environment where the job will run, which is `ubuntu-latest` in this case.
+
+    - **`steps`**: Lists the steps to execute in the job:
+      - **`Checkout code`**: Uses the `actions/checkout` action to fetch the latest code from the repository.
+      - **`Set up Docker Buildx`**: Configures Docker Buildx, a tool for building Docker images with advanced features like multi-platform support.
+      - **`Build Docker image`**: Runs a command to build the Docker image for the application using the Dockerfile.
+      - **`Log in to Docker Hub`**: Uses the `docker/login-action` to authenticate with Docker Hub using credentials stored in GitHub Secrets.
+      - **`Push Docker image`**: Pushes the built Docker image to Docker Hub.
+      - **`Deploy to Production Server`**: SSHs into the production server and executes commands to pull the latest Docker image and restart the application using Docker Compose.
+
 ## Running the Application
 
 1. **Install Docker**: Follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
@@ -171,23 +212,23 @@ Configures Prometheus to scrape metrics.
 
 4. **Build and Start Containers**:
 
-   bash
+```bash
+ `docker-compose up --build`
 
-   Copy code
-
-   `docker-compose up --build`
+```
 
 5. **Access the Application**:
+
    - **Flask App**: <http://localhost:5000>
    - **Grafana**: <http://localhost:3000> (Login with default username `admin` and password `admin`)
    - **Prometheus**: <http://localhost:9090>
+
 6. **Stopping the Application**:
 
-   bash
-
-   Copy code
-
+   ```bash
    `docker-compose down`
+
+   ```
 
 **Expense Tracker Homepage**: ![Homepage](https://github.com/user-attachments/assets/c899de3f-9c18-41a0-a467-ec32d5b809f8)
 
@@ -221,100 +262,26 @@ Configures Prometheus to scrape metrics.
 
 ## Data Flow and Verification
 
+**Check Database Content**:
+
+```bash
+`docker exec -it expense-tracker-db-1 /bin/bash`
+`psql -h localhost -U expense_user -d expense_tracker`
+`SELECT * FROM expense;`
+
+```
+
 ![Data Flow](https://github.com/user-attachments/assets/c9302db9-2e1d-45cc-af0c-ac39822bfbdf)
 
-### Application Flow
+## Prometheus
 
-1.  **User Interaction**:
-    - Users interact with the HTML form on the expense-tracker service to input expense details.
-2.  **Form Submission**:
-    - Data is sent via HTTP POST request to the `/add` route.
-3.  **Data Handling**:
-    - Flask processes the request, extracting the category and price from the form.
-4.  **Database Operation**:
-    - A new `Expense` record is created and saved to the PostgreSQL database.
-5.  **Redirect**:
-    - Users are redirected to the main page to view updated expense data.
+**Purpose**: Monitors and collects metrics from the application and system.
+**Configuration**: Defined in prometheus.yml
 
-### Verification
+## Grafana
 
-1.  **Verify Container Status**:
-
-    bash
-
-    Copy code
-
-    `docker ps`
-
-    Ensure all containers (expense-tracker, postgres, prometheus, node-exporter, grafana) are running.
-
-2.  **Check Database Content**:
-
-    bash
-
-    Copy code
-
-    `docker exec -it expense-tracker-db-1 /bin/bash
-psql -h localhost -U expense_user -d expense_tracker
-SELECT * FROM expense;`
-
-    Verify that expense records are correctly stored.
-
-## GitHub Actions Pipeline
-
-### Overview
-
-GitHub Actions is used for continuous integration and continuous deployment (CI/CD). The pipeline automates the process of building, testing, and deploying the Docker containers for the Expense Tracker application.
-
-### Workflow Configuration
-
-**.github/workflows/deploy.yml**
-
-yaml
-
-Copy code
-
-`name: Deploy Application
-
-on:
-push:
-branches: - main
-
-jobs:
-build-and-deploy:
-runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Build Docker image
-      run: |
-        docker build -t your-dockerhub-username/expense-tracker:latest .
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-
-    - name: Push Docker image
-      run: |
-        docker push your-dockerhub-username/expense-tracker:latest
-    - name: Deploy to Production Server
-      run: |
-        ssh user@your-server-ip 'docker pull your-dockerhub-username/expense-tracker:latest && docker-compose up -d' `
-
-### Key Steps:
-
-1.  **Checkout Code**: Retrieves the latest code from the repository.
-2.  **Set up Docker Buildx**: Configures Docker Buildx for building multi-platform images.
-3.  **Build Docker Image**: Builds the Docker image for the application.
-4.  **Log in to Docker Hub**: Authenticates with Docker Hub using credentials stored in GitHub Secrets.
-5.  **Push Docker Image**: Pushes the built image to Docker Hub.
-6.  **Deploy to Production Server**: SSHs into the production server, pulls the latest Docker image, and restarts the application using Docker Compose.
+**Purpose**: Visualizes metrics collected by Prometheus.
+**Configuration**: Connects to Prometheus as a data source.
 
 ## Future Improvements
 
