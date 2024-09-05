@@ -434,7 +434,11 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
 
 
    - Database:
-      ![image](https://github.com/user-attachments/assets/3f94eca1-5052-4cf7-bf98-dc42f9a0fa1b)
+![GrafanaPostgres1080](https://github.com/user-attachments/assets/7ed8a3b2-f598-4278-ab93-58a0202ab950)
+
+     - Postgres general stat counters such as rows fetched, inserted and updated in current session.
+     - Postgres Settings such as available shared buffer memory, WAL size and max worker processes.
+     - Detailed graphs for database stats and other stats such as active sessions, cache hit rate, transaction conflicts or deadlocks.
 
    -   Included screenshots of some dashboards and panels.
 
