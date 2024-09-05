@@ -144,9 +144,10 @@ Manages multi-container Docker applications.
   - **Ports**: Maps port 9100 for Node Exporter.
 
 - **postgres_exporter**:
-- **Image**: Uses the Postgres Exporter image.
-- **Environment Variables**: Configures PostgreSQL metrics source.
-- **Depends On**: Ensures dependencies on `db` and `prometheus`.
+
+  - **Image**: Uses the Postgres Exporter image.
+  - **Environment Variables**: Configures PostgreSQL metrics source.
+  - **Depends On**: Ensures dependencies on `db` and `prometheus`.
 
 **Volumes:**
 
@@ -161,15 +162,17 @@ Configures Prometheus to scrape metrics.
 **Configuration:**
 
 - **Global Settings:**
-- **`scrape_interval`**: Sets the frequency for scraping metrics (15 seconds).
+
+  - **`scrape_interval`**: Sets the frequency for scraping metrics (15 seconds).
 
 - **Scrape Jobs:**
+
   - **`expense-tracker`**: Scrapes metrics from the Flask app at `/metrics`.
   - **`node_exporter`**: Scrapes system metrics.
-- **`postgres`**: Scrapes PostgreSQL metrics.
+  - **`postgres`**: Scrapes PostgreSQL metrics.
 
 - **Rule Files:**
-- **`alert.rules.yml`**: Contains alerting rules.
+  - **`alert.rules.yml`**: Contains alerting rules.
 
 ### `deploy.yml`
 
@@ -282,6 +285,16 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 
 **Purpose**: Visualizes metrics collected by Prometheus.
 **Configuration**: Connects to Prometheus as a data source.
+
+### Dashboards:
+
+**Overview Dashboard**:Displays general metrics and system status.
+**Expense Tracker Dashboard**:Shows detailed metrics specific to the Expense Tracker application.
+
+### Alerts:
+
+**Metric**:Define thresholds for metrics such as CPU usage, memory usage, or specific application metrics.
+**Notification Channels:**:Set up email or Slack notifications for alerting.
 
 ## Future Improvements
 
