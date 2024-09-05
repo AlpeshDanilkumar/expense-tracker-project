@@ -252,8 +252,12 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 
 ![Data Flow](https://github.com/user-attachments/assets/c9302db9-2e1d-45cc-af0c-ac39822bfbdf)
 
-## Monitoring and SRE
-## Prometheus
+## Monitoring with Grafana and Prometheus
+## Overview
+- In this project, we use Grafana and Prometheus for monitoring and alerting. Prometheus collects metrics from our services, while Grafana is used for visualizing these metrics and setting up alerts. Below is a detailed guide on how these tools are configured and how alerts are set up.
+ 
+1. **Setting Up Prometheus**
+   ###Prometheus is an open-source monitoring system and time series database. It collects and stores metrics as time series data, which can be queried using its powerful query language.
 
 **Purpose**: Monitors and collects metrics from the application and system.
 **Configuration**: Defined in prometheus.yml
