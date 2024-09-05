@@ -304,9 +304,28 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
 
     This configuration tells Prometheus to scrape metrics from the expense tracker application, Node Exporter, and PostgreSQL Exporter.
 
-**Screenshot:**
+**Data Entries**: ![Data Entries](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
 
--   Include a screenshot of the `prometheus.yml` file.
+- **Description**: Tracks the number of expense entries over time to identify trends in user activity.
+
+**CPU Usage**: ![CPU Usage](https://github.com/user-attachments/assets/88f81947-1a0f-4bf9-a9ab-a17e0ba2c6c5)
+
+- **Description**: Displays CPU usage across different modes (idle, user, system) to monitor performance.
+
+**Available Memory**: ![Available Memory](https://github.com/user-attachments/assets/c9a72820-442c-4119-b49e-53cef7c89fb8)
+
+- **Description**: Shows available system memory to ensure adequate resources for applications.
+
+**Node Exporter Metrics**: ![Node Exporter](https://github.com/user-attachments/assets/d48bf1aa-f2cd-4ce7-a31e-3f038b5e8bd6)
+
+- **Description**: Monitors disk I/O operations to identify potential bottlenecks or performance issues.
+
+**Network Traffic**: ![Network Traffic](https://github.com/user-attachments/assets/6103b5fc-ad11-4a95-bd4a-c7a5f99ae571)
+
+- **Description**: Tracks incoming network traffic to monitor data rates and identify potential network issues.
+
+-   Included all the screenshots of Prometheus queries that was tested:
+
 
 ### 2\. **Setting Up Grafana**
 
@@ -335,18 +354,27 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
     -   Navigate to **Configuration** > **Data Sources**.
     -   Click **Add data source**, select **Prometheus**, and configure it with the Prometheus server URL (e.g., `http://prometheus:9090`).
 
-    **![image](https://github.com/user-attachments/assets/62ef3ba5-0f05-4a17-b2b9-c692f8b3bb06)
-**
+    ![image](https://github.com/user-attachments/assets/62ef3ba5-0f05-4a17-b2b9-c692f8b3bb06)
 
-    -   Include a screenshot of the Grafana data source configuration for Prometheus.
+    -   Included a screenshot of the Grafana data source configuration for Prometheus.
 3.  **Create Dashboards**:
 
     -   Go to **Create** > **Dashboard** in Grafana.
     -   Add panels to visualize metrics from Prometheus. For example, you can visualize CPU usage, memory usage, etc., using PromQL queries.
 
-    **Screenshot:**
+    ![image](https://github.com/user-attachments/assets/7e9be012-3f5b-4395-9e41-1b19639009cd)
 
-    -   Include screenshots of some dashboards and panels.
+    - CPU Utilisations:
+      ![image](https://github.com/user-attachments/assets/c0de37e1-6576-486c-a027-d5f6a329e769)
+      ![image](https://github.com/user-attachments/assets/d925078a-966e-4d9c-b4a9-da90f56c433e)
+      ![image](https://github.com/user-attachments/assets/0f1407d8-0f9d-4ad9-8d16-a859efabec4c)
+
+
+
+   - Database:
+      ![image](https://github.com/user-attachments/assets/3f94eca1-5052-4cf7-bf98-dc42f9a0fa1b)
+
+   -   Included screenshots of some dashboards and panels.
 
 ### 3\. **Setting Up Alerts**
 
@@ -363,77 +391,66 @@ Alerts are configured in Grafana based on the metrics collected by Prometheus. A
 
     -   **Name**: Enter a descriptive name for the alert rule.
     -   **Query**: Define the PromQL query to monitor. For example, to alert when CPU usage exceeds 80%, use:
-
-        promql
-
-        Copy code
-
-        `rate(node_cpu_seconds_total{mode="idle"}[5m]) < 0.2`
-
     -   **Threshold**: Set the threshold condition. For CPU usage, you might set it to alert if the rate is below 0.2, which indicates above 80% CPU usage.
 
-    **Screenshot:**
+   ![image](https://github.com/user-attachments/assets/c0f86aa6-f8dc-4b78-85cf-51f0a4d9ba0d)
 
-    -   Include screenshots of the alert rule configuration.
+   -   Include screenshots of the alert rule configuration.
+     
 2.  **Configure Evaluation Behavior**:
 
     -   **Pending Period**: Set how long the condition must be met before an alert is triggered (e.g., 5 minutes).
     -   **Evaluation Interval**: Define how often the alert rule is evaluated (e.g., every 1 minute).
 
-    **Screenshot:**
+    ![image](https://github.com/user-attachments/assets/d63d0963-f8e9-496b-9c2a-4a42592007fa)
 
     -   Include a screenshot of the evaluation behavior configuration.
+   
 3.  **Set Up Notifications**:
 
-    -   **Contact Points**: Configure notification channels such as Email, Slack, or Teams.
-        -   To set up a Teams notification, configure a webhook URL in **Alerting** > **Notification channels**.
-    -   **Notification Policies**: Define how notifications are routed to contact points.
+   ### 1\. **Configure Contact Points**
 
-    **Screenshot:**
+**Contact Points** are the channels through which alerts are sent. To receive notifications on Microsoft Teams, you need to configure a contact point with the Teams webhook URL.
 
-    -   Include screenshots of the notification channel setup and alert notification configuration.
+**Configuration Steps:**
 
-### Summary
+1.  **Add a New Contact Point**:
+![image](https://github.com/user-attachments/assets/18fc9223-6f4c-4ada-9faa-802b9f222c32)
+
+3.  **Configure Microsoft Teams Notification**:
+
+    -   **Name**: Enter a name for the contact point (e.g., "Teams Alerts").
+    -   **Type**: Select **Webhook**.
+    -   **URL**: Enter the Microsoft Teams webhook URL (obtained from Teams as described earlier).
+    -   **Custom Headers**: (Optional) Add any required headers if needed.
+
+### 2\. **Set Up Notification Policies**
+
+**Notification Policies** determine how alerts are routed to contact points. You can configure policies to ensure that alerts are sent to the correct contact points based on conditions and labels.
+
+**Configuration Steps:**
+
+1.  **Create and Define Notification Policy**:
+
+    -   **Name**: Enter a name for the policy (e.g., "CPU and URL Alerts").
+    -   **Default Contact Point**: Select the Microsoft Teams contact point you created earlier.
+    -   **Group By**: Optionally group alerts by labels if needed.
+    -   **Grouping**: Configure how multiple alerts are grouped into a single notification (e.g., by alert name).
+![image](https://github.com/user-attachments/assets/75ae08aa-d934-4083-9118-363c0bd1ce5e)
+
+### 2\. **Alerts on Teams**
+![image](https://github.com/user-attachments/assets/458f3b41-3f4c-4029-b2e6-60e3386c29d9)
+![image](https://github.com/user-attachments/assets/2211186e-8fe0-459f-a9f0-99edb7066797)
+
+
+
+### Summary about Monitoring
 
 In this project, we use Prometheus for metrics collection and Grafana for visualization and alerting. By setting up Prometheus to scrape metrics from various endpoints and configuring Grafana to visualize these metrics and set up alerts, we ensure that we are notified of critical issues in our application. This setup helps in proactive monitoring and maintaining system reliability.
 
-**Data Entries**: ![Data Entries](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
-
-- **Description**: Tracks the number of expense entries over time to identify trends in user activity.
-
-**CPU Usage**: ![CPU Usage](https://github.com/user-attachments/assets/88f81947-1a0f-4bf9-a9ab-a17e0ba2c6c5)
-
-- **Description**: Displays CPU usage across different modes (idle, user, system) to monitor performance.
-
-**Available Memory**: ![Available Memory](https://github.com/user-attachments/assets/c9a72820-442c-4119-b49e-53cef7c89fb8)
-
-- **Description**: Shows available system memory to ensure adequate resources for applications.
-
-**Node Exporter Metrics**: ![Node Exporter](https://github.com/user-attachments/assets/d48bf1aa-f2cd-4ce7-a31e-3f038b5e8bd6)
-
-- **Description**: Monitors disk I/O operations to identify potential bottlenecks or performance issues.
-
-**Network Traffic**: ![Network Traffic](https://github.com/user-attachments/assets/6103b5fc-ad11-4a95-bd4a-c7a5f99ae571)
-
-- **Description**: Tracks incoming network traffic to monitor data rates and identify potential network issues.
 
 
-## Grafana
 
-**Purpose**: Visualizes metrics collected by Prometheus.
-**Configuration**: Connects to Prometheus as a data source.
-
-### Dashboards:
-
-**Overview Dashboard**: Displays general metrics and system status.
-**Expense Tracker Dashboard**: Shows detailed metrics specific to the Expense Tracker application.
-
-### Alerts:
-
-**Metric**: Define thresholds for metrics such as CPU usage, memory usage, or specific application metrics.
-![image](https://github.com/user-attachments/assets/329da172-2383-46b6-a22e-f9fb8c2646e5)
-
-**Notification Channels:**: Set up email or Slack notifications for alerting.
 
 ## Future Improvements
 
