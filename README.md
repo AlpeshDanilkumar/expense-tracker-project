@@ -427,7 +427,7 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
 
     ![image](https://github.com/user-attachments/assets/7e9be012-3f5b-4395-9e41-1b19639009cd)
 
-    - CPU Utilisations:
+   - CPU Utilisations:
       ![image](https://github.com/user-attachments/assets/c0de37e1-6576-486c-a027-d5f6a329e769)
       ![image](https://github.com/user-attachments/assets/d925078a-966e-4d9c-b4a9-da90f56c433e)
       ![image](https://github.com/user-attachments/assets/0f1407d8-0f9d-4ad9-8d16-a859efabec4c)
@@ -440,7 +440,11 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
      - Postgres Settings such as available shared buffer memory, WAL size and max worker processes.
      - Detailed graphs for database stats and other stats such as active sessions, cache hit rate, transaction conflicts or deadlocks.
 
-   -   Included screenshots of some dashboards and panels.
+   - HTTP Requests:
+![httpGrafana](https://github.com/user-attachments/assets/985886f8-11ea-4759-869d-e193bf053f33)
+      - Shows Total Requests and requests per minute sent to application.
+      - Errors per second (4xx and 5xx errors)
+      - Average response time of the application to requests.
 
 ### 3\. **Setting Up Alerts**
 
