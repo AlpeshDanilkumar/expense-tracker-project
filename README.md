@@ -239,9 +239,24 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 
 **Add Expense**: ![Add Expense](https://github.com/user-attachments/assets/0dedffa3-31f5-4a00-91cb-196dcd4c48a6)
 
-## Monitoring and SRE
+## Data Flow and Verification
 
-### Dashboard
+**Check Database Content**:
+
+```bash
+`docker exec -it expense-tracker-db-1 /bin/bash`
+`psql -h localhost -U expense_user -d expense_tracker`
+`SELECT * FROM expense;`
+
+```
+
+![Data Flow](https://github.com/user-attachments/assets/c9302db9-2e1d-45cc-af0c-ac39822bfbdf)
+
+## Monitoring and SRE
+## Prometheus
+
+**Purpose**: Monitors and collects metrics from the application and system.
+**Configuration**: Defined in prometheus.yml
 
 **Data Entries**: ![Data Entries](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
 
@@ -263,23 +278,6 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 
 - **Description**: Tracks incoming network traffic to monitor data rates and identify potential network issues.
 
-## Data Flow and Verification
-
-**Check Database Content**:
-
-```bash
-`docker exec -it expense-tracker-db-1 /bin/bash`
-`psql -h localhost -U expense_user -d expense_tracker`
-`SELECT * FROM expense;`
-
-```
-
-![Data Flow](https://github.com/user-attachments/assets/c9302db9-2e1d-45cc-af0c-ac39822bfbdf)
-
-## Prometheus
-
-**Purpose**: Monitors and collects metrics from the application and system.
-**Configuration**: Defined in prometheus.yml
 
 ## Grafana
 
@@ -294,6 +292,8 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 ### Alerts:
 
 **Metric**: Define thresholds for metrics such as CPU usage, memory usage, or specific application metrics.
+![image](https://github.com/user-attachments/assets/329da172-2383-46b6-a22e-f9fb8c2646e5)
+
 **Notification Channels:**: Set up email or Slack notifications for alerting.
 
 ## Future Improvements
