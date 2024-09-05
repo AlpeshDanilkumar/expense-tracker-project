@@ -15,7 +15,7 @@ class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     category = db.Column(db.String(50), nullable=False)
-    price = db.Column(db.Float, nullable=False)
+    price = db.Column(db.Float, nullable=False) # Dev Note should change this to db.Column(db.Numeric(10,2)), or alternateively store price in pence and divide by 100.
 
 @app.route('/')
 def index():
