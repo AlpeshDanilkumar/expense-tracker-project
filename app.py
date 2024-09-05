@@ -13,6 +13,7 @@ data_entry_counter = Counter('data_entries_total', 'Total number of data entries
 
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
     category = db.Column(db.String(50), nullable=False)
     price = db.Column(db.Float, nullable=False)
 
@@ -24,13 +25,23 @@ def index():
 
 @app.route('/add', methods=['POST'])
 def add_expense():
+    name = request.form.get('name')    
     category = request.form.get('category')
     price = request.form.get('price')
-    new_expense = Expense(category=category, price=float(price))
+    new_expense = Expense(name=name, category=category, price=float(price))
     db.session.add(new_expense)
     db.session.commit()
     data_entry_counter.inc()  # Increment the custom metric
     return redirect(url_for('index'))
+
+@app.route('/delete/<int:id>', methods=['GET', 'POST'])
+def delete_expense(id):
+    expense = Expense.query.get_or_404(id)
+    if request.method == 'POST':
+        db.session.delete(expense)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('delete.html', expense=expense)
 
 @app.route('/metrics')
 def metrics_route():
