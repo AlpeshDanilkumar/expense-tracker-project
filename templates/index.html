@@ -36,7 +36,7 @@
             <tr>
                 <td>{{ expense.name }}</td>
                 <td>{{ expense.category }}</td>
-                <td>£{{ expense.price }}</td>
+                <td>£{{ expense.price | format(2) }}</td>
                 <td>
                     <form method="POST" action="/delete/{{ expense.id }}">
                         <button type="submit" class="delete-icon">X</button>
