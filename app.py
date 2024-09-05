@@ -27,7 +27,7 @@ def index():
 def add_expense():
     name = request.form.get('name')    
     category = request.form.get('category')
-    price = "{:.2f}".format(request.form.get('price'))
+    price = request.form.get('price')
     new_expense = Expense(name=name, category=category, price=float(price))
     db.session.add(new_expense)
     db.session.commit()
