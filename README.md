@@ -296,32 +296,37 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
 
     This configuration tells Prometheus to scrape metrics from the expense tracker application, Node Exporter, and PostgreSQL Exporter.
 
-**Data Entries**: 
+**Data Entries**: 
+
 ![Data Entries](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
 
 - **Description**: Tracks the number of expense entries over time to identify trends in user activity.
 
-**CPU Usage**: 
+**CPU Usage**: 
+
 ![CPU Usage](https://github.com/user-attachments/assets/88f81947-1a0f-4bf9-a9ab-a17e0ba2c6c5)
 
 - **Description**: Displays CPU usage across different modes (idle, user, system) to monitor performance.
 
-**Available Memory**: 
+**Available Memory**: 
+
 ![Available Memory](https://github.com/user-attachments/assets/c9a72820-442c-4119-b49e-53cef7c89fb8)
 
 - **Description**: Shows available system memory to ensure adequate resources for applications.
 
-**Node Exporter Metrics**: 
+**Node Exporter Metrics**: 
+
 ![Node Exporter](https://github.com/user-attachments/assets/d48bf1aa-f2cd-4ce7-a31e-3f038b5e8bd6)
 
 - **Description**: Monitors disk I/O operations to identify potential bottlenecks or performance issues.
 
-**Network Traffic**: 
+**Network Traffic**: 
+
 ![Network Traffic](https://github.com/user-attachments/assets/6103b5fc-ad11-4a95-bd4a-c7a5f99ae571)
 
 - **Description**: Tracks incoming network traffic to monitor data rates and identify potential network issues.
 
--   Included all the screenshots of Prometheus queries that was tested:
+-   Included all the screenshots of Prometheus queries that was tested:
 
 
 ### 2\. **Setting Up Grafana**
