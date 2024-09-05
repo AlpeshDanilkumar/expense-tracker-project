@@ -533,10 +533,40 @@ To resolve this efficiently, we decided to switch to using Docker Compose for ma
 This solution avoids exposing the system externally, keeps costs down, and ensures our application runs smoothly in the development environment.
 
 
-## Future Improvements
+Site Reliability Engineering (SRE) Principles:
+---------------------------------------------
 
-1.  **Enhanced Security**: Implement additional security measures for user data protection.
-2.  **User Authentication**: Add user authentication and authorization features.
-3.  **Advanced Analytics**: Integrate advanced data analytics and reporting features.
-4.  **Performance Optimization**: Optimize application performance and scalability.
-5.  **Container Orchestration**: Consider using Kubernetes for container orchestration and management.
+### Applied SRE Principles
+
+1.  **Monitoring and Observability**:
+
+    -   **Prometheus and Grafana Integration**: Integrated Prometheus for metrics collection and Grafana for visualization provides comprehensive observability into the application's health and performance. This setup facilitates proactive monitoring and timely issue detection.
+    -   **Alerts and Notifications**: Alerts are configured to notify the team when critical metrics exceed predefined thresholds, such as CPU usage above 80% or HTTP status code anomalies. Notifications are sent via Microsoft Teams to ensure prompt action.
+2.  **Automation**:
+
+    -   **CI/CD Pipeline**: Utilizes GitHub Actions for automated deployments. The pipeline performs code checkout, builds Docker images, and deploys containers to EC2, reducing manual effort and ensuring consistent deployment processes.
+    -   **Docker Compose**: Manages multiple containers and orchestrates service deployments, automating aspects of container management and scaling.
+3.  **Reliability and Availability**:
+
+    -   **Service Monitoring**: Monitors application performance using metrics like CPU usage and HTTP request rates. These metrics are crucial for maintaining application reliability and availability.
+    -   **Alerting Configuration**: Configured to send alerts for critical issues such as high CPU usage and HTTP request errors, facilitating quick resolution and maintaining application uptime.
+4.  **Incident Management**:
+
+    -   **Alert Notifications**: Integrated with Microsoft Teams to ensure that critical alerts are communicated to the team efficiently, enabling faster response and incident resolution.
+5.  **Continuous Improvement**:
+
+    -   **Regular Updates**: The CI/CD pipeline supports continuous integration and delivery, allowing for regular updates and improvements to the application while minimizing manual effort.
+    -   **Monitoring Feedback Loop**: Utilizes feedback from monitoring and alerting to continuously iterate and enhance system reliability.
+
+### Toil Management
+
+**Toil** refers to repetitive, manual, and operational work that does not contribute to the long-term improvement of the system and is often prone to human error. In the context of this project:
+
+-   **Automated Deployments**: The CI/CD pipeline reduces toil by automating the deployment process, eliminating the need for manual interventions during code deployments and updates.
+-   **Automated Monitoring and Alerts**: By setting up Prometheus and Grafana with automated alerting, we reduce the manual effort required to monitor application health and respond to issues.
+
+**Future Improvements**:
+
+-   **Reduce Manual Intervention**: Continuously look for opportunities to further automate operational tasks to minimize toil and improve operational efficiency.
+-   **Define and Monitor SLOs**: Establish clear SLOs for application performance and reliability. Set up monitoring to ensure these SLOs are met and regularly review and adjust as necessary.
+-   **Report on SLAs and SLOs**: Implement reporting mechanisms to track compliance with SLAs and SLOs, providing visibility into application performance and reliability.
