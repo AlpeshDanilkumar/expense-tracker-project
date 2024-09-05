@@ -578,7 +578,7 @@ Site Reliability Engineering (SRE) Principles:
 
 ## Contributors
 
-- Nabiha
-- Richard
-- Alpesh
+- [Nabiha Sharif](https://github.com/Nabiha717)
+- [Richard Lam](https://github.com/thebigburd)
+- [Alpesh Danilkumar](https://github.com/AlpeshDanilkumar)
 
