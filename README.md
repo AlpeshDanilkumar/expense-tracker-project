@@ -267,10 +267,6 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
 
 1.  **Prometheus Installation**: Prometheus is included in our Docker setup. In the `docker-compose.yml` file, we have defined a service for Prometheus:
 
-    yaml
-
-    Copy code
-
     `prometheus:
       image: prom/prometheus
       volumes:
@@ -279,10 +275,6 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
         - "9090:9090"`
 
 2.  **Prometheus Configuration**: The Prometheus configuration file `prometheus.yml` specifies which endpoints Prometheus should scrape metrics from:
-
-    yaml
-
-    Copy code
 
     `global:
       scrape_interval: 15s
@@ -304,23 +296,28 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
 
     This configuration tells Prometheus to scrape metrics from the expense tracker application, Node Exporter, and PostgreSQL Exporter.
 
-**Data Entries**: ![Data Entries](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
+**Data Entries**: 
+![Data Entries](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
 
 - **Description**: Tracks the number of expense entries over time to identify trends in user activity.
 
-**CPU Usage**: ![CPU Usage](https://github.com/user-attachments/assets/88f81947-1a0f-4bf9-a9ab-a17e0ba2c6c5)
+**CPU Usage**: 
+![CPU Usage](https://github.com/user-attachments/assets/88f81947-1a0f-4bf9-a9ab-a17e0ba2c6c5)
 
 - **Description**: Displays CPU usage across different modes (idle, user, system) to monitor performance.
 
-**Available Memory**: ![Available Memory](https://github.com/user-attachments/assets/c9a72820-442c-4119-b49e-53cef7c89fb8)
+**Available Memory**: 
+![Available Memory](https://github.com/user-attachments/assets/c9a72820-442c-4119-b49e-53cef7c89fb8)
 
 - **Description**: Shows available system memory to ensure adequate resources for applications.
 
-**Node Exporter Metrics**: ![Node Exporter](https://github.com/user-attachments/assets/d48bf1aa-f2cd-4ce7-a31e-3f038b5e8bd6)
+**Node Exporter Metrics**: 
+![Node Exporter](https://github.com/user-attachments/assets/d48bf1aa-f2cd-4ce7-a31e-3f038b5e8bd6)
 
 - **Description**: Monitors disk I/O operations to identify potential bottlenecks or performance issues.
 
-**Network Traffic**: ![Network Traffic](https://github.com/user-attachments/assets/6103b5fc-ad11-4a95-bd4a-c7a5f99ae571)
+**Network Traffic**: 
+![Network Traffic](https://github.com/user-attachments/assets/6103b5fc-ad11-4a95-bd4a-c7a5f99ae571)
 
 - **Description**: Tracks incoming network traffic to monitor data rates and identify potential network issues.
 
@@ -334,10 +331,6 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
 **Configuration Steps:**
 
 1.  **Grafana Installation**: Grafana is also included in our Docker setup:
-
-    yaml
-
-    Copy code
 
     `grafana:
       image: grafana/grafana
@@ -370,7 +363,6 @@ In this project, we use Grafana and Prometheus for monitoring and alerting. Prom
       ![image](https://github.com/user-attachments/assets/0f1407d8-0f9d-4ad9-8d16-a859efabec4c)
 
 
-
    - Database:
       ![image](https://github.com/user-attachments/assets/3f94eca1-5052-4cf7-bf98-dc42f9a0fa1b)
 
@@ -395,7 +387,7 @@ Alerts are configured in Grafana based on the metrics collected by Prometheus. A
 
    ![image](https://github.com/user-attachments/assets/c0f86aa6-f8dc-4b78-85cf-51f0a4d9ba0d)
 
-   -   Include screenshots of the alert rule configuration.
+   -   Included screenshots of the alert rule configuration.
      
 2.  **Configure Evaluation Behavior**:
 
@@ -404,7 +396,7 @@ Alerts are configured in Grafana based on the metrics collected by Prometheus. A
 
     ![image](https://github.com/user-attachments/assets/d63d0963-f8e9-496b-9c2a-4a42592007fa)
 
-    -   Include a screenshot of the evaluation behavior configuration.
+    -   Included a screenshot of the evaluation behavior configuration.
    
 3.  **Set Up Notifications**:
 
@@ -443,12 +435,9 @@ Alerts are configured in Grafana based on the metrics collected by Prometheus. A
 ![image](https://github.com/user-attachments/assets/2211186e-8fe0-459f-a9f0-99edb7066797)
 
 
-
-### Summary about Monitoring
+### Monitoring summary  
 
 In this project, we use Prometheus for metrics collection and Grafana for visualization and alerting. By setting up Prometheus to scrape metrics from various endpoints and configuring Grafana to visualize these metrics and set up alerts, we ensure that we are notified of critical issues in our application. This setup helps in proactive monitoring and maintaining system reliability.
-
-
 
 
 
