@@ -444,6 +444,20 @@ Alerts are configured in Grafana based on the metrics collected by Prometheus. A
 
 In this project, we use Prometheus for metrics collection and Grafana for visualization and alerting. By setting up Prometheus to scrape metrics from various endpoints and configuring Grafana to visualize these metrics and set up alerts, we ensure that we are notified of critical issues in our application. This setup helps in proactive monitoring and maintaining system reliability.
 
+### Limitations
+
+**Kubernetes Cluster Access and CI/CD Strategy Update:**
+
+As part of our deployment process, we initially faced a limitation when trying to run Kubernetes using Minikube on our local system. Since Minikube requires the system to be exposed to the internet for GitHub Actions to access the cluster, this posed a security and infrastructure challenge. Using Amazon EKS was considered but would have introduced additional costs, which we wanted to avoid.
+![image](https://github.com/user-attachments/assets/d48df987-b986-413c-9cac-b6c623885d66)
+
+To resolve this efficiently, we decided to switch to using Docker Compose for managing our multiple containers. With this setup, we've integrated a CI/CD pipeline via GitHub Actions, which handles the following:
+
+-   Builds new Docker images for the application
+-   Deletes existing containers
+-   Deploys new containers to ensure a seamless and updated application deployment
+
+This solution avoids exposing the system externally, keeps costs down, and ensures our application runs smoothly in the development environment.
 
 
 ## Future Improvements
