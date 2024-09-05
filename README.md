@@ -288,13 +288,13 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 
 ### Dashboards:
 
-**Overview Dashboard**:Displays general metrics and system status.
-**Expense Tracker Dashboard**:Shows detailed metrics specific to the Expense Tracker application.
+**Overview Dashboard**: Displays general metrics and system status.
+**Expense Tracker Dashboard**: Shows detailed metrics specific to the Expense Tracker application.
 
 ### Alerts:
 
-**Metric**:Define thresholds for metrics such as CPU usage, memory usage, or specific application metrics.
-**Notification Channels:**:Set up email or Slack notifications for alerting.
+**Metric**: Define thresholds for metrics such as CPU usage, memory usage, or specific application metrics.
+**Notification Channels:**: Set up email or Slack notifications for alerting.
 
 ## Future Improvements
 
@@ -303,5 +303,3 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 3.  **Advanced Analytics**: Integrate advanced data analytics and reporting features.
 4.  **Performance Optimization**: Optimize application performance and scalability.
 5.  **Container Orchestration**: Consider using Kubernetes for container orchestration and management.
-
-Feel free to adapt this README to better fit your specific needs or to reflect any additional details about your setup!
