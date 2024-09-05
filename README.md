@@ -252,6 +252,71 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 
 ![Data Flow](https://github.com/user-attachments/assets/c9302db9-2e1d-45cc-af0c-ac39822bfbdf)
 
+### GitHub Actions CI/CD Pipeline
+
+To automate our deployment process, we use GitHub Actions for continuous integration and deployment (CI/CD). This pipeline helps us build, test, and deploy our Docker containers.
+
+**Configuration Steps:**
+
+1.  **GitHub Actions Workflow File**:
+
+    -   Create a `.github/workflows/ci-cd.yml` file in your repository.
+
+    **Example Workflow File**:
+
+    name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Adjust if you use a different default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_KEY }}
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd ~/expense-tracker
+          git pull origin main
+          docker-compose down
+          docker-compose build
+          docker-compose up -d
+        EOF
+
+    This workflow file automates the process of:
+
+    -   Checking out the latest code
+    -   Building a new Docker image
+    -   Pushing the image to a Docker registry
+    -   Deploying the updated image using Docker Compose
+![image](https://github.com/user-attachments/assets/a5532da6-97b4-4c1c-9b1c-c65d66b9f3f7)
+
+
+2.  **Secrets Management**:
+
+    -   Store sensitive information, such as Docker registry credentials, in GitHub Secrets. Go to **Settings** > **Secrets** in your GitHub repository and add the following secrets:
+        -   `DOCKER_USERNAME`
+        -   `DOCKER_PASSWORD`
+
+![image](https://github.com/user-attachments/assets/7eabf386-8bfe-40b3-ba2a-b31c4b855d4b)
+
+    -   Included  screenshots of the GitHub Secrets configuration.
+
+3.  **New Docker images and containers**:
+   ![image](https://github.com/user-attachments/assets/1300c3cd-45b2-4fcc-b18d-22d510206412)
+
+
 Monitoring with Grafana and Prometheus
 --------------------------------------
 
