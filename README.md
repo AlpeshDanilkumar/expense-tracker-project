@@ -252,15 +252,150 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 
 ![Data Flow](https://github.com/user-attachments/assets/c9302db9-2e1d-45cc-af0c-ac39822bfbdf)
 
-## Monitoring with Grafana and Prometheus
-## Overview
-- In this project, we use Grafana and Prometheus for monitoring and alerting. Prometheus collects metrics from our services, while Grafana is used for visualizing these metrics and setting up alerts. Below is a detailed guide on how these tools are configured and how alerts are set up.
- 
-1. **Setting Up Prometheus**
-   ###Prometheus is an open-source monitoring system and time series database. It collects and stores metrics as time series data, which can be queried using its powerful query language.
+Monitoring with Grafana and Prometheus
+--------------------------------------
 
-**Purpose**: Monitors and collects metrics from the application and system.
-**Configuration**: Defined in prometheus.yml
+### Overview
+
+In this project, we use Grafana and Prometheus for monitoring and alerting. Prometheus collects metrics from our services, while Grafana is used for visualizing these metrics and setting up alerts. Below is a detailed guide on how these tools are configured and how alerts are set up.
+
+### 1\. **Setting Up Prometheus**
+
+**Prometheus** is an open-source monitoring system and time series database. It collects and stores metrics as time series data, which can be queried using its powerful query language.
+
+**Configuration Steps:**
+
+1.  **Prometheus Installation**: Prometheus is included in our Docker setup. In the `docker-compose.yml` file, we have defined a service for Prometheus:
+
+    yaml
+
+    Copy code
+
+    `prometheus:
+      image: prom/prometheus
+      volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      ports:
+        - "9090:9090"`
+
+2.  **Prometheus Configuration**: The Prometheus configuration file `prometheus.yml` specifies which endpoints Prometheus should scrape metrics from:
+
+    yaml
+
+    Copy code
+
+    `global:
+      scrape_interval: 15s
+
+    scrape_configs:
+      - job_name: 'expense-tracker'
+        metrics_path: '/metrics'
+        static_configs:
+          - targets: ['expense-tracker:5000']
+
+      - job_name: 'node_exporter'
+        static_configs:
+          - targets: ['node-exporter:9100']
+
+      - job_name: 'postgres'
+        metrics_path: '/metrics'
+        static_configs:
+          - targets: ['postgres_exporter:9187']`
+
+    This configuration tells Prometheus to scrape metrics from the expense tracker application, Node Exporter, and PostgreSQL Exporter.
+
+**Screenshot:**
+
+-   Include a screenshot of the `prometheus.yml` file.
+
+### 2\. **Setting Up Grafana**
+
+**Grafana** is an open-source platform for monitoring and observability that integrates with Prometheus to visualize metrics.
+
+**Configuration Steps:**
+
+1.  **Grafana Installation**: Grafana is also included in our Docker setup:
+
+    yaml
+
+    Copy code
+
+    `grafana:
+      image: grafana/grafana
+      ports:
+        - "3000:3000"
+      volumes:
+        - grafana_data:/var/lib/grafana
+      environment:
+        - GF_SECURITY_ADMIN_PASSWORD=admin`
+
+2.  **Add Prometheus as a Data Source**:
+
+    -   Log in to Grafana (default URL: `http://localhost:3000`).
+    -   Navigate to **Configuration** > **Data Sources**.
+    -   Click **Add data source**, select **Prometheus**, and configure it with the Prometheus server URL (e.g., `http://prometheus:9090`).
+
+    **![image](https://github.com/user-attachments/assets/62ef3ba5-0f05-4a17-b2b9-c692f8b3bb06)
+**
+
+    -   Include a screenshot of the Grafana data source configuration for Prometheus.
+3.  **Create Dashboards**:
+
+    -   Go to **Create** > **Dashboard** in Grafana.
+    -   Add panels to visualize metrics from Prometheus. For example, you can visualize CPU usage, memory usage, etc., using PromQL queries.
+
+    **Screenshot:**
+
+    -   Include screenshots of some dashboards and panels.
+
+### 3\. **Setting Up Alerts**
+
+Alerts are configured in Grafana based on the metrics collected by Prometheus. Alerts can notify you when specific conditions are met, such as high CPU usage or application errors.
+
+**Configuration Steps:**
+
+1.  **Create Alert Rules**:
+
+    -   Go to **Alerting** > **Alert Rules** in Grafana.
+    -   Click **New alert rule**.
+
+    **Define the Alert Rule:**
+
+    -   **Name**: Enter a descriptive name for the alert rule.
+    -   **Query**: Define the PromQL query to monitor. For example, to alert when CPU usage exceeds 80%, use:
+
+        promql
+
+        Copy code
+
+        `rate(node_cpu_seconds_total{mode="idle"}[5m]) < 0.2`
+
+    -   **Threshold**: Set the threshold condition. For CPU usage, you might set it to alert if the rate is below 0.2, which indicates above 80% CPU usage.
+
+    **Screenshot:**
+
+    -   Include screenshots of the alert rule configuration.
+2.  **Configure Evaluation Behavior**:
+
+    -   **Pending Period**: Set how long the condition must be met before an alert is triggered (e.g., 5 minutes).
+    -   **Evaluation Interval**: Define how often the alert rule is evaluated (e.g., every 1 minute).
+
+    **Screenshot:**
+
+    -   Include a screenshot of the evaluation behavior configuration.
+3.  **Set Up Notifications**:
+
+    -   **Contact Points**: Configure notification channels such as Email, Slack, or Teams.
+        -   To set up a Teams notification, configure a webhook URL in **Alerting** > **Notification channels**.
+    -   **Notification Policies**: Define how notifications are routed to contact points.
+
+    **Screenshot:**
+
+    -   Include screenshots of the notification channel setup and alert notification configuration.
+
+### Summary
+
+In this project, we use Prometheus for metrics collection and Grafana for visualization and alerting. By setting up Prometheus to scrape metrics from various endpoints and configuring Grafana to visualize these metrics and set up alerts, we ensure that we are notified of critical issues in our application. This setup helps in proactive monitoring and maintaining system reliability.
 
 **Data Entries**: ![Data Entries](https://github.com/user-attachments/assets/450e675a-05e8-488c-b26d-002e8d3cab69)
 
