@@ -4,6 +4,11 @@
 
 The Expense Tracker application is a comprehensive web-based tool designed to help users efficiently track and manage their expenses. Built with Flask and PostgreSQL, the application is containerized using Docker and orchestrated with Docker Compose. It includes monitoring through Prometheus and visualization with Grafana. This README provides an in-depth guide on setting up, running, monitoring, and deploying the application.
 
+### Development and Deployment Setup
+
+-   **Development:** All development and testing are conducted directly on an Ubuntu EC2 instance from AWS. Code is written locally and synced to the server via SSH.
+-   **Deployment:** Managed via GitHub Actions, which deploys updates to the EC2 instance by pulling the latest code, rebuilding Docker containers, and restarting them.
+
 ## Application Flow
 
 1. **User Interaction**:
@@ -570,3 +575,10 @@ Site Reliability Engineering (SRE) Principles:
 -   **Reduce Manual Intervention**: Continuously look for opportunities to further automate operational tasks to minimize toil and improve operational efficiency.
 -   **Define and Monitor SLOs**: Establish clear SLOs for application performance and reliability. Set up monitoring to ensure these SLOs are met and regularly review and adjust as necessary.
 -   **Report on SLAs and SLOs**: Implement reporting mechanisms to track compliance with SLAs and SLOs, providing visibility into application performance and reliability.
+
+## Contributors
+
+- Nabiha
+- Richard
+- Alpesh
+
