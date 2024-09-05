@@ -269,7 +269,7 @@ To automate our deployment process, we use GitHub Actions for continuous integra
 on:
   push:
     branches:
-      - main  # Adjust if you use a different default branch
+      - main 
 
 jobs:
   deploy:
