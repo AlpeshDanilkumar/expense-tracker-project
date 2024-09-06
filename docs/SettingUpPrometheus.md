@@ -6,7 +6,7 @@
 
 1.  **Docker Compose Configuration:** We set up Prometheus as a service in our `docker-compose.yml` file to run alongside other services like the application and the database.
 
-
+```
     `version: '3.7'
     services:
       expense-tracker:
@@ -62,10 +62,11 @@
     volumes:
       postgres_data:
       grafana_data:`
+```
 
 2.  **Prometheus Configuration:** The `prometheus.yml` file defines the scrape configurations and how Prometheus collects metrics from various sources.
 
- 
+ ```
     `global:
       scrape_interval: 15s
 
@@ -83,6 +84,7 @@
         metrics_path: '/metrics'
         static_configs:
           - targets: ['postgres_exporter:9187']`
+ ```
 
 **Metrics and Queries:**
 
