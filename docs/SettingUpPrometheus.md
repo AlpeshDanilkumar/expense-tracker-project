@@ -94,6 +94,8 @@ Here are some queries you can use in Prometheus to view different metrics:
 
     -   **Query:**
         `rate(node_cpu_seconds_total{mode="idle"}[5m])`
+        ![image](https://github.com/user-attachments/assets/2dd68ed5-24b2-4e24-b5b4-cb256df8a028)
+
 
     -   **Description:** This query shows the rate of CPU idle time over the past 5 minutes. To find the CPU usage, you would subtract this from 1 (or 100% if expressed as a percentage).
 2.  **Memory Usage:**
@@ -101,6 +103,8 @@ Here are some queries you can use in Prometheus to view different metrics:
     -   **Query:**
 
         `(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes`
+        ![image](https://github.com/user-attachments/assets/b2db0697-4a9d-4025-917f-25fb03c974f3)
+
 
     -   **Description:** This query calculates the memory usage as a percentage of total memory.
 3.  **HTTP Requests:**
@@ -108,6 +112,8 @@ Here are some queries you can use in Prometheus to view different metrics:
     -   **Query:**
 
         `flask_http_request_total`
+        ![image](https://github.com/user-attachments/assets/2c68f59b-3495-4f76-b93f-c4b8b085ad53)
+
 
     -   **Description:** This query shows the total number of HTTP requests handled by your Flask application.
 4.  **PostgreSQL Metrics:**
@@ -115,6 +121,8 @@ Here are some queries you can use in Prometheus to view different metrics:
     -   **Query:**
 
         `pg_stat_activity_count`
+        ![image](https://github.com/user-attachments/assets/46a54595-d40c-4b18-b440-2fdb23452037)
+
 
     -   **Description:** This query shows the number of active PostgreSQL connections.
 5.  **Node Exporter Metrics (System Metrics):**
@@ -122,6 +130,8 @@ Here are some queries you can use in Prometheus to view different metrics:
     -   **Query:**
 
         `node_disk_io_time_seconds_total`
+        ![image](https://github.com/user-attachments/assets/1d08824d-fe2f-48d3-9619-104eedfecdd9)
+
 
     -   **Description:** This query provides the total disk I/O time for the node.
 
