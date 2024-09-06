@@ -238,11 +238,15 @@ The `deploy.yml` file defines a GitHub Actions workflow for automating the build
 
    ```
 
-**Expense Tracker Homepage**: ![Homepage](https://github.com/user-attachments/assets/c899de3f-9c18-41a0-a467-ec32d5b809f8)
+**Expense Tracker Homepage**:
+![expenseTracker1080](https://github.com/user-attachments/assets/fa879da0-e52a-4574-9524-9b7f5fba09e9)
+ - Displays individual expense names, category and the cost in a table format.
+ - Total cost of all expenses displayed at top.
+ - Expenses can be deleted by clicking the X.
 
-**Input Category and Price**: ![Input Form](https://github.com/user-attachments/assets/594f1854-04d7-427a-8d2a-f7b4a8516192)
+**Add Expense**:
+![expenseTrackerAdd1080](https://github.com/user-attachments/assets/12d4e68f-3b1e-4fa9-81b9-2d509f92aa74)
 
-**Add Expense**: ![Add Expense](https://github.com/user-attachments/assets/0dedffa3-31f5-4a00-91cb-196dcd4c48a6)
 
 ## Data Flow and Verification
 
