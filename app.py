@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from prometheus_client import Counter, generate_latest
 from prometheus_flask_exporter import PrometheusMetrics
@@ -15,24 +15,40 @@ class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     category = db.Column(db.String(50), nullable=False)
-    price = db.Column(db.Float, nullable=False) # Dev Note should change this to db.Column(db.Numeric(10,2)), or alternateively store price in pence and divide by 100.
+    price = db.Column(db.Integer, nullable=False)
 
 @app.route('/')
 def index():
     expenses = Expense.query.all()
     total = sum(expense.price for expense in expenses)
-    return render_template('index.html', expenses=expenses, total="{:.2f}".format(total))
+    return render_template('index.html', expenses=expenses, total="{:.2f}".format(total / 100))
 
 @app.route('/add', methods=['POST'])
 def add_expense():
     name = request.form.get('name')    
     category = request.form.get('category')
-    price = request.form.get('price')
-    new_expense = Expense(name=name, category=category, price=float(price))
+    price_pounds = float(request.form.get('price'))
+    price_pence = int(price_pounds * 100)
+    new_expense = Expense(name=name, category=category, price=price_pence)
     db.session.add(new_expense)
     db.session.commit()
     data_entry_counter.inc()  # Increment the custom metric
     return redirect(url_for('index'))
+
+@app.route('/update/<int:id>', methods=['POST'])
+def update_expense(id):
+    expense = Expense.query.get_or_404(id)
+    expense.name = request.form.get('name')
+    expense.category = request.form.get('category')
+    price_pounds = float(request.form.get('price'))
+    expense.price = int(price_pounds * 100)  # Convert pounds to pence
+    
+    try:
+        db.session.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"success": False, "error": str(e)})
 
 @app.route('/delete/<int:id>', methods=['GET', 'POST'])
 def delete_expense(id):

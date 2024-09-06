@@ -2,63 +2,247 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
     <title>Expense Tracker</title>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    // Limits price input to two decimal points
+    let categoryChartInstance = null;
+    let priceRangeChartInstance = null;
+
     function formatPrice(input) {
         const value = input.value;
         const decimalIndex = value.indexOf('.');
         if (decimalIndex !== -1) {
-          const decimalPart = value.substring(decimalIndex + 1);
-          if (decimalPart.length > 2) {
-            input.value = value.substring(0, decimalIndex + 3);
-          }
+            const decimalPart = value.substring(decimalIndex + 1);
+            if (decimalPart.length > 2) {
+                input.value = value.substring(0, decimalIndex + 3);
+            }
         }
-      }
+    }
+
+    function toggleEditMode(button) {
+        const row = button.closest('tr');
+        row.classList.toggle('edit-mode');
+        row.classList.toggle('display-mode');
+        
+        if (row.classList.contains('edit-mode')) {
+            button.textContent = 'Save';
+            // Populate edit fields with current values
+            row.querySelector('input[name="name"]').value = row.querySelector('.display-field[name="name"]').textContent;
+            row.querySelector('input[name="category"]').value = row.querySelector('.display-field[name="category"]').textContent;
+            row.querySelector('input[name="price"]').value = row.querySelector('.display-field[name="price"]').textContent.replace('£', '');
+        } else {
+            button.textContent = '✎';
+            updateExpense(row);
+        }
+    }
+
+    function updateExpense(row) {
+        const id = row.dataset.id;
+        const name = row.querySelector('input[name="name"]').value;
+        const category = row.querySelector('input[name="category"]').value;
+        const price = row.querySelector('input[name="price"]').value;
+
+        fetch(`/update/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `name=${encodeURIComponent(name)}&category=${encodeURIComponent(category)}&price=${encodeURIComponent(price)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                row.querySelector('.display-field[name="name"]').textContent = name;
+                row.querySelector('.display-field[name="category"]').textContent = category;
+                row.querySelector('.display-field[name="price"]').textContent = `£${parseFloat(price).toFixed(2)}`;
+                updateTotal();
+                createPieCharts(); // Recreate charts after updating an expense
+            } else {
+                alert('Failed to update expense. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+
+    function createPieCharts() {
+        createCategoryChart();
+        createPriceRangeChart();
+    }    
+
+function createCategoryChart() {
+    const ctx = document.getElementById('categoryChart').getContext('2d');
+    
+    // Destroy the previous chart instance if it exists
+    if (categoryChartInstance) {
+        categoryChartInstance.destroy();
+    }
+
+    const expenses = Array.from(document.querySelectorAll('tr[data-id]'));
+    const categoryData = {};
+
+    expenses.forEach(expense => {
+        const category = expense.querySelector('.display-field[name="category"]').textContent;
+        const price = parseFloat(expense.querySelector('.display-field[name="price"]').textContent.replace('£', ''));
+        categoryData[category] = (categoryData[category] || 0) + price;
+    });
+
+    // Create a new chart instance and store it in categoryChartInstance
+    categoryChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(categoryData),
+            datasets: [{
+                data: Object.values(categoryData),
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            title: {
+                display: true,
+                text: 'Expenses by Category'
+            }
+        }
+    });
+}
+
+    function createPriceRangeChart() {
+    const ctx = document.getElementById('priceRangeChart').getContext('2d');
+
+    // Destroy the previous chart instance if it exists
+    if (priceRangeChartInstance) {
+        priceRangeChartInstance.destroy();
+    }
+
+    const expenses = Array.from(document.querySelectorAll('tr[data-id]'));
+    const priceRanges = {
+        '£0 - £10': 0,
+        '£10 - £50': 0,
+        '£50 - £100': 0,
+        '£100+': 0
+    };
+
+    expenses.forEach(expense => {
+        const price = parseFloat(expense.querySelector('.display-field[name="price"]').textContent.replace('£', ''));
+        if (price <= 10) priceRanges['£0 - £10']++;
+        else if (price <= 50) priceRanges['£10 - £50']++;
+        else if (price <= 100) priceRanges['£50 - £100']++;
+        else priceRanges['£100+']++;
+    });
+
+    // Create a new chart instance and store it in priceRangeChartInstance
+    priceRangeChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(priceRanges),
+            datasets: [{
+                data: Object.values(priceRanges),
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            title: {
+                display: true,
+                text: 'Expenses by Price Range'
+            }
+        }
+    });
+}
+
+    function updateTotal() {
+        const priceSpans = document.querySelectorAll('.display-field[name="price"]');
+        let total = 0;
+        priceSpans.forEach(span => {
+            total += parseFloat(span.textContent.replace('£', ''));
+        });
+        document.getElementById('total').textContent = `${total.toFixed(2)}`;
+    }
+    
+    // Call this function after the page loads and whenever expenses are updated
+    document.addEventListener('DOMContentLoaded', createPieCharts);
     </script>
 </head>
 <body>
-    <h1>Expense Tracker</h1>   
+    <div class="container">
+        <div class="main-content">
+            <h1>Expense Tracker</h1>   
 
-    <form method="POST" action="/add">
-        <input type="text" name="name" placeholder="Expense Name" required>
-        <input list="categories" name="category" placeholder="Select or Enter Category">
-        <datalist id="categories">
-            <option value="Food">
-            <option value="Bills">
-            <option value="Entertainment">
-            <option value="Clothing">
-        </datalist>
-        <input type="number" step="0.01" name="price" id="price" placeholder="Price" required oninput="formatPrice(this)">
-        <button type="submit">Add Expense</button>
-    </form>
-    <h2>Total: £{{ total }}</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Expense Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for expense in expenses %}
-            <tr>
-                <td>{{ expense.name }}</td>
-                <td>{{ expense.category }}</td>
-                <td>£{{ expense.price }}</td>
-                <td>
-                    <form method="POST" action="/delete/{{ expense.id }}">
-                        <button type="submit" class="delete-icon">X</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <div class="expense-form">
+                <form method="POST" action="/add">
+                    <input type="text" name="name" placeholder="Expense Name" required>
+                    <input list="categories" name="category" placeholder="Select or Enter Category" required>
+                    <datalist id="categories">
+                        <option value="Food">
+                        <option value="Bills">
+                        <option value="Entertainment">
+                        <option value="Clothing">
+                    </datalist>
+                    <input type="number" step="0.01" name="price" id="price" placeholder="Price" required oninput="formatPrice(this)">
+                    <button type="submit">Add Expense</button>
+                </form>
+            </div>
+
+            <div class="expense-list">
+                <h2>Total: £ <span id="total">{{ total }}</span></h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Expense Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expense in expenses %}
+                        <tr class="display-mode" data-id="{{ expense.id }}">
+                            <td>
+                                <span class="display-field" name="name">{{ expense.name }}</span>
+                                <input class="edit-field" type="text" name="name">
+                            </td>
+                            <td>
+                                <span class="display-field" name="category">{{ expense.category }}</span>
+                                <input class="edit-field" type="text" name="category">
+                            </td>
+                            <td>
+                                <span class="display-field" name="price">£{{ "%.2f"|format(expense.price / 100) }}</span>
+                                <input class="edit-field" type="number" step="0.01" name="price" oninput="formatPrice(this)">
+                            </td>
+                            <td>
+                                <button type="button" class="update-icon" onclick="toggleEditMode(this)">✎</button>
+                                <form method="POST" action="{{ url_for('delete_expense', id=expense.id) }}" style="display: inline;">
+                                    <button type="submit" class="delete-icon">X</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="priceRangeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
