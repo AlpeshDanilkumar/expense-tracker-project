@@ -3,6 +3,8 @@
 **Overview:** To monitor our application effectively, we've set up alerting in Grafana for CPU usage and HTTP request hits. Notifications are sent to a Microsoft Teams channel when these alerts are triggered.
 
 **Steps to Set Up Alerts:**
+![image](https://github.com/user-attachments/assets/5acc5ce2-0d72-4fe3-9768-7855a6339cd1)
+
 
 1.  **Create Alerts in Grafana:**
 
@@ -16,6 +18,8 @@
 
     -   **Go to Grafana Alerting > Contact Points.**
     -   **Create a new contact point for Microsoft Teams using the webhook URL provided by Teams.**
+      ![image](https://github.com/user-attachments/assets/a15810c4-d28e-4452-a46d-0f13c981f17a)
+
 
     `Webhook URL: https://teams/webhook/your-webhook-url`
 
@@ -23,10 +27,16 @@
 
     -   **Go to Grafana Alerting > Notification Policies.**
     -   **Create or update a policy to route alerts to the Teams contact point.**
+      ![image](https://github.com/user-attachments/assets/bb4975a4-5e22-474f-93dd-4dac73c481a1)
+
 4.  **Verify Alerts:**
 
     -   **Ensure that alerts are firing correctly in Grafana.**
     -   **Check that notifications are received in your Microsoft Teams channel.**
+    ![image](https://github.com/user-attachments/assets/852bb847-7c08-4ec9-b3e4-396a15f98188)
+
+    ![image](https://github.com/user-attachments/assets/c0c1e58c-2e89-4d10-98d0-e4bbcd99fe4a)
+
 
 **Code and Query Examples:**
 
